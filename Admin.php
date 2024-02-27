@@ -73,6 +73,42 @@ if (isset($_POST['logout'])) {
         </div>
       </div>
     </nav>
+
+    <table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      
+      <th scope="col">Task Name</th>
+      <th scope="col">Task Given By</th>
+      <th scope="col">Task Given To</th>
+      <th scope="col">Date Of Allocation</th>
+      <th scope="col">Task Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td >Larry the Bird</td>
+      <td >Larry the Bird</td>
+      <td>@twitter</td>
+      <td>@twitter</td>
+    </tr>
+  </tbody>
+</table>
   </main>
 
 

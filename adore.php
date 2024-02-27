@@ -36,13 +36,19 @@ if (isset($_POST['logout'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item" style="font-weight:500"><a href="Admin.php">Admin's Page</a></li>
+    <li class="breadcrumb-item active" aria-current="page" style="font-weight:500">Approval Page</li>
+  </ol>
+</nav>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-        <button type="submit" name="logout">Logout</button>
+        <!-- <button type="submit" name="logout">Logout</button> -->
     </form>
     <table class="table table-bordered">
         <thead>
           <tr>
-            <th scope="col">#</th>
+            <th scope="col"></th>
             <th scope="col" id="name" name="name">Name</th>
             <th scope="col" id="email" name="email">Email</th>
             <th scope="col" id="role" name="role">Status</th>
@@ -61,10 +67,12 @@ if (isset($_POST['logout'])) {
                 echo "<input type='hidden' name='username' value='{$row['username']}'>";
                 echo "<label for='Status'>Status:</label>";
                 echo "<select name='member' class='status-select' data-member-id='{$row['id']}' data-member-email='{$row['username']}'>";
-                echo "<option value='Select the Role' >Select Your Role</option>";         
+                echo "<option value='Select the Role' > Not Selected </option>";  
+                echo "<option value='Member'"; if ($row['role'] == 'Member') echo " selected"; echo ">Member</option>";       
                 echo "<option value='Admin'"; if ($row['role'] == 'Admin') echo " selected"; echo ">Admin</option>";
                 echo "<option value='Manager'"; if ($row['role'] == 'Manager') echo " selected"; echo ">Manager</option>";
-                echo "<option value='Member'"; if ($row['role'] == 'Member') echo " selected"; echo ">Member</option>";
+                
+                echo "<option value='Tech'"; if ($row['role'] == 'Tech-Team') echo " selected"; echo ">Tech-Team</option>";
 
                 echo "</select>"; // Added closing tag for select
                 echo "</td>";
