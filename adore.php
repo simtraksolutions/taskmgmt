@@ -35,6 +35,19 @@ if (isset($_POST['logout'])) {
     <title>Task-Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
+<style>
+    .disapprove-btn{
+        margin-left: 10px;
+    }
+
+    @media (min-width:200px) and (max-width:800px)
+    {
+        .disapprove-btn{
+            margin-top: 10px;
+        /* margin-left: 10px; */
+    }
+    }
+</style>
 <body>
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
@@ -82,6 +95,15 @@ if (isset($_POST['logout'])) {
                 } else {
                     echo "<button type='submit' name='updatebtn' class='btn btn-success approve-btn' data-member-id='{$row['id']}' data-role='{$row['role']}'>Approve</button>";
                 }
+
+
+                if ($row['role'] == 'disapproved') {
+                    echo "<button type='button' class='btn btn-danger disapprove-btn' disabled>Disapproved</button>";
+                } else {
+                    echo "<button type='submit' name='updatebtn'  class='btn btn-danger disapprove-btn' data-member-id='{$row['id']}' data-role='{$row['role']}'>Disapprove</button>";
+                }
+
+
                 
                 echo "</td>";
                 echo "</form>";
