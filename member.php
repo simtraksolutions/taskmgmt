@@ -203,7 +203,7 @@ header a:hover{
 </style>
 <body>
     <header>
-        <img src="https://adoreearth.org/assets/images/ADORE.png" alt="" id="background">
+        <!-- <img src="https://adoreearth.org/assets/images/ADORE.png" alt="" id="background"> -->
         <nav>
             <form method="GET">
                 <label for="s-bar">Search Task Name:</label>

@@ -2,8 +2,10 @@
 session_start();
 
 include 'connect.php'; 
-$query = "SELECT id, username, name, role FROM user1"; // Include the 'id' column in the query
+
+$query = "SELECT id, username, name, role FROM user1"; // Include the 'email' column in the query
 $result = mysqli_query($con, $query);
+
 if (isset($_POST['updatebtn'])) {
     $username = $_POST['username'];
     $role = $_POST['member'];
@@ -19,9 +21,24 @@ if (isset($_POST['updatebtn'])) {
     }
 }
 
+if (isset($_POST['disapprovebtn'])) {
+    $username = $_POST['username'];
+    $role = 'Canceled';
+
+    $query1 = "UPDATE user1 SET role = '$role' WHERE username = '$username'";
+   
+    $result1 = mysqli_query($con, $query1);
+
+    if (!$result1) {
+        die("Query failed: " . mysqli_error($con));
+    } else {
+        echo "User role set to 'Canceled' for $username";
+    }
+}
+
 if (isset($_POST['logout'])) {
     session_destroy();
-    header("Location: index.php"); // Redirect to the login page after logout
+    header("Location: index.php"); 
     exit();
 }
 
@@ -37,73 +54,70 @@ if (isset($_POST['logout'])) {
 </head>
 <style>
     .disapprove-btn{
-        margin-left: 10px;
+        margin-left: 15px;
     }
 
-    @media (min-width:200px) and (max-width:800px)
-    {
+    #lgt-btn{
+        border-radius: 4px;
+        width: 100px;
+        margin: 10px 10px;
+    }
+
+    @media (min-width:200px) and (max-width:800px){
         .disapprove-btn{
-            margin-top: 10px;
-        /* margin-left: 10px; */
+        margin-top: 15px;
+        margin-left: 0px;
     }
     }
 </style>
 <body>
-<nav aria-label="breadcrumb">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+        <button type="submit" id="lgt-btn" name="logout">Logout</button>
+        <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item" style="font-weight:500"><a href="Admin.php">Admin's Page</a></li>
-    <li class="breadcrumb-item active" aria-current="page" style="font-weight:500">Approval Page</li>
+    <li class="breadcrumb-item"><a href="Admin.php">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Approval Page</li>
   </ol>
 </nav>
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-        <!-- <button type="submit" name="logout">Logout</button> -->
     </form>
     <table class="table table-bordered">
         <thead>
           <tr>
-            <th scope="col"></th>
+            <th scope="col">#</th>
             <th scope="col" id="name" name="name">Name</th>
             <th scope="col" id="email" name="email">Email</th>
             <th scope="col" id="role" name="role">Status</th>
-            <th scope="col">Approve</th>
+            <th scope="col">Approve/Disapprove</th>
           </tr>
         </thead>
         <tbody>
             <?php
             while ($row = mysqli_fetch_assoc($result)) {
                 echo "<tr>";
-                echo "<td></td>";
+                echo "<td>{$row['id']}</td>";
                 echo "<td>{$row['name']}</td>";
-                echo "<td>{$row['username']}</td>"; // Corrected this line to display the username
+                echo "<td>{$row['username']}</td>"; // Corrected this line to display the email
                 echo "<td>";
                 echo "<form method='POST' action='adore.php'>";
                 echo "<input type='hidden' name='username' value='{$row['username']}'>";
                 echo "<label for='Status'>Status:</label>";
                 echo "<select name='member' class='status-select' data-member-id='{$row['id']}' data-member-email='{$row['username']}'>";
-                echo "<option value='Select the Role' > Not Selected </option>";  
-                echo "<option value='Member'"; if ($row['role'] == 'Member') echo " selected"; echo ">Member</option>";       
+                echo "<option value='Select the Role' >Select Your Role</option>";         
                 echo "<option value='Admin'"; if ($row['role'] == 'Admin') echo " selected"; echo ">Admin</option>";
                 echo "<option value='Manager'"; if ($row['role'] == 'Manager') echo " selected"; echo ">Manager</option>";
-                
-                echo "<option value='Tech'"; if ($row['role'] == 'Tech-Team') echo " selected"; echo ">Tech-Team</option>";
+                echo "<option value='Member'"; if ($row['role'] == 'Member') echo " selected"; echo ">Member</option>";
 
-                echo "</select>"; // Added closing tag for select
+                echo "</select>";
                 echo "</td>";
                 echo "<td>";
-                if ($row['role'] == 'approved') { // Corrected 'approved' to match the role in the database
+                if ($row['role'] == 'Approved') { 
                     echo "<button type='button' class='btn btn-success' disabled>Approved</button>";
+                } else if ($row['role'] == 'Canceled') { 
+                    echo "<button type='button' class='btn btn-danger' disabled>Canceled</button>";
                 } else {
                     echo "<button type='submit' name='updatebtn' class='btn btn-success approve-btn' data-member-id='{$row['id']}' data-role='{$row['role']}'>Approve</button>";
+                    echo "<button type='submit' name='disapprovebtn' class='btn btn-danger disapprove-btn' data-member-id='{$row['id']}' data-role='{$row['role']}'>Disapprove</button>";
                 }
-
-
-                if ($row['role'] == 'disapproved') {
-                    echo "<button type='button' class='btn btn-danger disapprove-btn' disabled>Disapproved</button>";
-                } else {
-                    echo "<button type='submit' name='updatebtn'  class='btn btn-danger disapprove-btn' data-member-id='{$row['id']}' data-role='{$row['role']}'>Disapprove</button>";
-                }
-
-
                 
                 echo "</td>";
                 echo "</form>";
@@ -113,22 +127,5 @@ if (isset($_POST['logout'])) {
         </tbody>
     </table>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var approveButtons = document.querySelectorAll('.approve-btn');
-            approveButtons.forEach(function(button) {
-                button.addEventListener('click', function() {
-                    var role = this.getAttribute('data-role');
-                    if (role === 'approve') {
-                        this.innerText = 'Approved';
-                        this.disabled = true;
-                    }
-                    else{
-                        this.innerText = 'Approved'; // Change the button text to 'Approved'
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 </html>

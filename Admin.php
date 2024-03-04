@@ -73,7 +73,16 @@ if (isset($_POST['logout'])) {
         </div>
       </div>
     </nav>
+    <?php
+include 'connect.php'; // Assuming this file contains your database connection
 
+$query = "SELECT * FROM tform";
+$result = mysqli_query($con, $query);
+
+if (!$result) {
+    die("Query failed: " . mysqli_error($con));
+}
+?>
     <table class="table table-striped table-bordered">
   <thead>
     <tr>
@@ -86,28 +95,20 @@ if (isset($_POST['logout'])) {
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td >Larry the Bird</td>
-      <td >Larry the Bird</td>
-      <td>@twitter</td>
-      <td>@twitter</td>
-    </tr>
-  </tbody>
+  <?php
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<tr>";
+                 
+                    echo "<td>{$row['name']}</td>";
+                    echo "<td>{$row['email']}</td>";
+                    echo "<td>{$row['recipient_email']}</td>";
+                    
+                    echo "<td>{$row['currentDate']}</td>";
+                    echo "<td>{$row['status']}</td>";
+                    echo "</tr>";
+                }
+                ?>
+            </tbody>
 </table>
   </main>
 
